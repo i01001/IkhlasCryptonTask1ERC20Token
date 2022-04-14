@@ -1,4 +1,9 @@
-# Advanced Sample Hardhat Project
+# Crypton Academy Task 1 - Create an ERC20 Token
+
+The Contract can be verified on Etherscan - Rinkeby Network:
+
+Contract Address link: https://rinkeby.etherscan.io/address/0xedf786b12f9363df3f82a3ce4833ec43c339f78a#code
+
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
 
