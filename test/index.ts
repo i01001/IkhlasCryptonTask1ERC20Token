@@ -71,6 +71,18 @@ describe("Checking if initial values are correct", function () {
     expect(await ikhlasToken.connect(signers).approve(second.address, (ethers.utils.parseUnits("1", 20)))).to.emit(ikhlasToken, "Approval").withArgs(signers.address, second.address, (ethers.utils.parseUnits("1", 20)));
   });
 
+  it("Should check the balance of msg.sender about availability of tokens greater than value prior to executing the approve function", async function () {
+    const [signers, second] = await ethers.getSigners();
+    const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
+    await expect(ikhlasToken.connect(signers).approve(second.address, (ethers.utils.parseUnits("2", 24)))).to.be.revertedWith("msg.sender does not have sufficient tokens");
+  });
+
+  it("Should check if msg.sender token balance is greater than the value prior to executing the transfer function", async function () {
+    const [signers, second] = await ethers.getSigners();
+    const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
+    await expect(ikhlasToken.connect(signers).transfer(second.address, (ethers.utils.parseUnits("2", 24)))).to.be.revertedWith("msg.sender does not have sufficient tokens");
+  });
+
   it("Should transfer the tokens with the transfer function", async function () {
     const [signers, second] = await ethers.getSigners();
     const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
@@ -82,6 +94,20 @@ describe("Checking if initial values are correct", function () {
     const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
     await ikhlasToken.connect(signers).approve(second.address, (ethers.utils.parseUnits("1", 20)));
     expect(await ikhlasToken.connect(second).transferFrom(signers.address, third.address, (ethers.utils.parseUnits("1", 20)))).to.emit(ikhlasToken, "Transfer").withArgs(signers.address, third.address, (ethers.utils.parseUnits("1", 20)));
+  });
+
+  it("Should check availability of tokens in message sender prior to executing the the tokens with the transferfrom function", async function () {
+    const [signers, second, third] = await ethers.getSigners();
+    const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
+    await ikhlasToken.connect(signers).approve(second.address, (ethers.utils.parseUnits("1", 20)));
+    await expect(ikhlasToken.connect(second).transferFrom(signers.address, third.address, (ethers.utils.parseUnits("2", 24)))).to.be.revertedWith("msg.sender does not have sufficient tokens");
+  });
+
+  it("Should check allowance balance of tokens prior to executing the transferfrom function", async function () {
+    const [signers, second, third] = await ethers.getSigners();
+    const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
+    await ikhlasToken.connect(signers).approve(second.address, (ethers.utils.parseUnits("1", 20)));
+    await expect(ikhlasToken.connect(second).transferFrom(signers.address, third.address, (ethers.utils.parseUnits("2", 21)))).to.be.revertedWith("value exceeding the allowance limit");
   });
 
   it("Should display the allowance with the Allowance function", async function () {
@@ -107,6 +133,13 @@ describe("Checking if initial values are correct", function () {
     const [signers, second, third] = await ethers.getSigners();
     const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
     await expect (ikhlasToken.connect(second).burn(second.address, (ethers.utils.parseUnits("1", 20)))).to.be.revertedWith('This transaction can only be carried out by owner!');
+  });
+
+  it("Should check if address from which funds will be burned has sufficent tokens prior to running the burn function", async function () {
+    const [signers, second, third] = await ethers.getSigners();
+    const ikhlasToken = await new IkhlasToken__factory(signers).deploy();
+    await ikhlasToken.connect(signers).transfer(second.address, (ethers.utils.parseUnits("1", 20)));
+    await expect (ikhlasToken.connect(signers).burn(second.address, (ethers.utils.parseUnits("2", 20)))).to.be.revertedWith("value to be burned exceeds the balance");
   });
 
   it("Should allow owner to run the burn function", async function () {

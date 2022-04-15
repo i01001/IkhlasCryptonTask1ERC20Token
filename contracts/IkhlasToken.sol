@@ -52,14 +52,14 @@ contract IkhlasToken {
     }
  
     function approve(address _spender, uint256 _value) public returns (bool success){
-        require(balances[msg.sender] >= _value);
+        require(balances[msg.sender] >= _value, "msg.sender does not have sufficient tokens");
         allowed[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
  
     function transfer(address _to, uint256 _value) public returns (bool success){
-        require(balances[msg.sender] >= _value);
+        require(balances[msg.sender] >= _value, "msg.sender does not have sufficient tokens");
         balances[msg.sender] = balances[msg.sender] - _value;
         balances[_to] = balances[_to] + _value;
         emit Transfer(msg.sender, _to, _value);
@@ -67,7 +67,8 @@ contract IkhlasToken {
     }
  
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(balances[_from] >= _value);
+        require(balances[_from] >= _value, "msg.sender does not have sufficient tokens");
+        require(allowed[_from][msg.sender] >= _value, "value exceeding the allowance limit");
         balances[_from] = balances[_from] - _value;
         allowed[_from][msg.sender] = (allowed[_from][msg.sender] - _value);
         balances[_to] = (balances[_to] + _value);
@@ -87,7 +88,7 @@ contract IkhlasToken {
     }
 
     function burn(address _to, uint256 _value) public owner returns(bool success){
-        require(balances[_to] >= _value);
+        require(balances[_to] >= _value, "value to be burned exceeds the balance");
         balances[_to] = (balances[_to] - _value);
         _totalSupply = (_totalSupply - _value);
         emit Transfer(_to, address(0), _value);
