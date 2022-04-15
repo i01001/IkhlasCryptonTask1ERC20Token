@@ -39,25 +39,25 @@ describe("Checking if initial values are correct", function () {
     expect(await ikhlasToken.totalSupply()).to.be.equal(ethers.utils.parseUnits("1", 24));
   });
 
-  it("Should return the correct value with the add function", async function () {
-    const signers = await ethers.getSigners();
-    const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
-    expect(await ikhlasToken.add((ethers.utils.parseUnits("1", 21)),(ethers.utils.parseUnits("2", 21)))).to.be.equal(ethers.utils.parseUnits("3", 21));
-  });
+  // it("Should return the correct value with the add function", async function () {
+  //   const signers = await ethers.getSigners();
+  //   const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
+  //   expect(await ikhlasToken.add((ethers.utils.parseUnits("1", 21)),(ethers.utils.parseUnits("2", 21)))).to.be.equal(ethers.utils.parseUnits("3", 21));
+  // });
   
-  it("Should return the correct value with the sub function", async function () {
-    const signers = await ethers.getSigners();
-    const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
-    expect(await ikhlasToken.sub((ethers.utils.parseUnits("3", 21)),(ethers.utils.parseUnits("1", 21)))).to.be.equal(ethers.utils.parseUnits("2", 21));
-  });
+  // it("Should return the correct value with the sub function", async function () {
+  //   const signers = await ethers.getSigners();
+  //   const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
+  //   expect(await ikhlasToken.sub((ethers.utils.parseUnits("3", 21)),(ethers.utils.parseUnits("1", 21)))).to.be.equal(ethers.utils.parseUnits("2", 21));
+  // });
 
-  it("Should ensure the require of sub function is being met", async function () {
-    const signers = await ethers.getSigners();
-    const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
-    let inputa = await ethers.utils.parseUnits("2", 21);
-    let inputb = await ethers.utils.parseUnits("1", 21);
-    await expect(ikhlasToken.sub(inputb,inputa)).to.be.revertedWith("error");
-  });
+  // it("Should ensure the require of sub function is being met", async function () {
+  //   const signers = await ethers.getSigners();
+  //   const ikhlasToken = await new IkhlasToken__factory(signers[0]).deploy();
+  //   let inputa = await ethers.utils.parseUnits("2", 21);
+  //   let inputb = await ethers.utils.parseUnits("1", 21);
+  //   await expect(ikhlasToken.sub(inputb,inputa)).to.be.revertedWith("error");
+  // });
 
   it("Should return the correct balanceof with the balanceof function", async function () {
     const signers = await ethers.getSigners();
